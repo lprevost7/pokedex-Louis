@@ -19,19 +19,29 @@
   </mat-card-header>
   <img
     mat-card-image
-    [src]="pokemon.image"
+    [src]="profileImage"
     [alt]="'Image de ' + pokemon.name"
   >
-  <mat-card-content>
-    <p>Points de vie : {{ pokemon.hp }}</p>
-    <p>Taux de capture : {{ pokemon.cr | captureRate }}</p>
-    @if (isPartOfTeam) {
-      <img class="team-icon" src="/pkm.ico" alt="Pokémon dans la team">
-    }
-  </mat-card-content>
+
+  @if (displayMode === DisplayMode.Spread) {
+    <mat-card-content>
+      <p>Points de vie : {{ pokemon.hp }}</p>
+      <p>Taux de capture : {{ pokemon.cr | captureRate }}</p>
+      @if (isPartOfTeam) {
+        <img class="team-icon" src="/pkm.ico" alt="Pokémon dans la team">
+      }
+    </mat-card-content>
+
     <mat-card-actions>
-        <button matButton="outlined" (click)="updatePokemon(); $event.stopPropagation()">
-            <mat-icon>Edit</mat-icon>
-        </button>
+      <button
+        matButton="outlined"
+        (click)="updatePokemon(); $event.stopPropagation()"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
     </mat-card-actions>
+  } @else if (displayMode === DisplayMode.Compact && isPartOfTeam) {
+    <img class="team-icon" src="/pkm.ico" alt="Pokémon dans la team">
+  }
+
 </mat-card>

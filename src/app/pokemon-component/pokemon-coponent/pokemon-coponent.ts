@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { IPokemon } from '../../shared/interface/pokemon';
 import { CaptureRatePipe } from '../../shared/pipe/capture-rate.pipe';
 import { PokemonNamePipe } from '../../shared/pipe/pokemon-name.pipe';
+import { PokemonDisplayMode } from '../../shared/enum/card-display';
 
 @Component({
   imports: [
@@ -21,14 +22,19 @@ import { PokemonNamePipe } from '../../shared/pipe/pokemon-name.pipe';
 })
 export class PokemonCoponent {
   @Input({ required: true }) pokemon!: IPokemon;
+  @Input({ required: true }) displayMode!: PokemonDisplayMode;
   @Output() teamSelectionChange = new EventEmitter<{
     pokemon: IPokemon;
     selected: boolean;
   }>();
   public isPartOfTeam = false;
+  public DisplayMode = PokemonDisplayMode;
 
   get typeImage(): string {
     return `https://raw.githubusercontent.com/partywhale/pokemon-type-icons/main/icons/${this.pokemon.type.toLowerCase()}.svg`;
+  }
+  get profileImage(): string {
+    return `https://img.pokemondb.net/sprites/black-white/anim/normal/${this.pokemon.name.toLowerCase()}.gif`;
   }
 
   public updatePokemon(): number {
@@ -42,4 +48,5 @@ export class PokemonCoponent {
       selected: this.isPartOfTeam,
     });
   }
+
 }

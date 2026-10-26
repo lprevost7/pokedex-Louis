@@ -1,5 +1,13 @@
 <main class="pokedex">
   <button
+    class="display-tab"
+    type="button"
+    (click)="changeDisplayMode()"
+  >
+    Mode : {{ displayMode }}
+  </button>
+
+  <button
     class="team-tab"
     type="button"
     [attr.aria-expanded]="teamTabOpen"
@@ -30,6 +38,7 @@
     @for (pokemon of pokemons; track pokemon.id) {
       <app-pokemon-coponent
         [pokemon]="pokemon"
+        [displayMode]="displayMode"
         (teamSelectionChange)="updateTeam($event)"
       />
     }

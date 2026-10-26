@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { PokemonCoponent } from './pokemon-component/pokemon-coponent/pokemon-coponent';
 import { PokemonService } from './shared/service/pokemon-service';
 import { IPokemon } from './shared/interface/pokemon';
+import { PokemonDisplayMode } from './shared/enum/card-display';
 
 @Component({
   imports: [RouterOutlet, PokemonCoponent],
@@ -12,6 +13,8 @@ import { IPokemon } from './shared/interface/pokemon';
 })
 export class App {
   readonly pokemons;
+  readonly DisplayMode = PokemonDisplayMode;
+  displayMode = PokemonDisplayMode.Spread;
   team: IPokemon[] = [];
   teamTabOpen = false;
 
@@ -30,5 +33,11 @@ export class App {
 
   toggleTeamTab(): void {
     this.teamTabOpen = !this.teamTabOpen;
+  }
+
+  changeDisplayMode(): void {
+    const modes = Object.values(PokemonDisplayMode);
+    const index = modes.indexOf(this.displayMode);
+    this.displayMode = modes[(index + 1) % modes.length];
   }
 }

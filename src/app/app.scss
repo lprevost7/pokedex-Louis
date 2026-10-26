@@ -29,6 +29,25 @@
   background: #125ca1;
 }
 
+.display-tab {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 1rem;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: #455a64;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.display-tab:hover {
+  background: #263238;
+}
+
 .team-panel {
   margin: 0 auto 2rem;
   padding: 1rem;
@@ -71,8 +90,35 @@ h1 {
 
 .pokemon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.5rem;
+}
+
+/* Décale une ligne sur deux pour donner un effet de plateau. */
+.pokemon-grid > :nth-child(8n + 5),
+.pokemon-grid > :nth-child(8n + 6),
+.pokemon-grid > :nth-child(8n + 7),
+.pokemon-grid > :nth-child(8n + 8) {
+  transform: translateX(1rem);
+}
+
+@media (max-width: 900px) {
+  .pokemon-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pokemon-grid > :nth-child(8n + 5),
+  .pokemon-grid > :nth-child(8n + 6),
+  .pokemon-grid > :nth-child(8n + 7),
+  .pokemon-grid > :nth-child(8n + 8) {
+    transform: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .pokemon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /*
