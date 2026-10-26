@@ -1,0 +1,37 @@
+<mat-card 
+  class="pokemon-card" 
+  appearance="outlined"   
+  [class.selected]="isPartOfTeam"
+  (click)="toggleTeamSelection()"
+  tabindex="0"
+>
+
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>{{ pokemon.name }}</mat-card-title>
+      <mat-card-subtitle>#{{ pokemon.id }}</mat-card-subtitle>
+      <img
+        class="type-icon"
+        [src]="typeImage"
+        [alt]="'Type ' + pokemon.type"
+      >
+    </mat-card-title-group>
+  </mat-card-header>
+  <img
+    mat-card-image
+    [src]="pokemon.image"
+    [alt]="'Image de ' + pokemon.name"
+  >
+  <mat-card-content>
+    <p>Points de vie : {{ pokemon.hp }}</p>
+    <p>Taux de capture : {{ pokemon.cr }}</p>
+    @if (isPartOfTeam) {
+      <img class="team-icon" src="/pkm.ico" alt="Pokémon dans la team">
+    }
+  </mat-card-content>
+    <mat-card-actions>
+        <button matButton="outlined" (click)="updatePokemon(); $event.stopPropagation()">
+            <mat-icon>Edit</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

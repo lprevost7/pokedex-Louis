@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.pokemon-card {
+  height: 100%;
+}
+
+img {
+  object-fit: contain;
+}
+
+.pokemon-card > img {
+  height: 220px;
+}
+
+.type-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.team-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.pokemon-card {
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: lightblue;
+  }
+
+  &.selected {
+    border-color: green;
+  }
+
+  &:focus-visible {
+    outline: 2px solid blue;
+    outline-offset: 2px;
+  }
+}
