@@ -4,9 +4,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { IPokemon } from '../../shared/interface/pokemon';
+import { CaptureRatePipe } from '../../shared/pipe/capture-rate.pipe';
+import { PokemonNamePipe } from '../../shared/pipe/pokemon-name.pipe';
 
 @Component({
-  imports: [MatCardModule, MatButtonModule, MatIconModule],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    CaptureRatePipe,
+    PokemonNamePipe,
+  ],
   selector: 'app-pokemon-coponent',
   styleUrl: './pokemon-coponent.scss',
   templateUrl: './pokemon-coponent.html',
