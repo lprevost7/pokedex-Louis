@@ -1,4 +1,22 @@
 <main class="pokedex">
+  @if (isFireRedTeam) {
+    <section class="secret-game" aria-label="Console secrète Pokémon Rouge Feu">
+      <h2>Dracaufeu + Mewtwo : passage secret débloqué !</h2>
+      <p>Pokémon Rouge Feu démarre automatiquement. Retirer l’un des deux Pokémon ferme la console.</p>
+      <iframe src="emulator/index.html" title="Émulateur Game Boy Advance"
+        allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
+    </section>
+  }
+
+  <section class="cynthia-panel" [hidden]="!isCynthiaTeam" aria-label="Équipe de Cynthia">
+    @if (isCynthiaTeam) {
+      <h2>Cynthia entre en scène !</h2>
+      <img src="cynthia.gif" alt="Cynthia, la Maîtresse de la Ligue de Sinnoh">
+    }
+    <audio #cynthiaAudio src="Cynthia_Theme.mp3" controls loop preload="none"
+      aria-label="Musique de Cynthia"></audio>
+  </section>
+
   <button
     class="display-tab"
     type="button"
@@ -6,6 +24,77 @@
   >
     Mode : {{ displayMode }}
   </button>
+
+  <button class="add-tab" type="button" (click)="openCreateForm()">
+    <mat-icon>add</mat-icon>
+    Ajouter un Pokémon
+  </button>
+
+  @if (isFormOpen()) {
+    <section class="pokemon-form-panel" aria-label="Formulaire Pokémon">
+      <h2>{{ editingPokemon() ? 'Modifier le Pokémon' : 'Ajouter un Pokémon' }}</h2>
+      <form (ngSubmit)="savePokemon()">
+        <div class="form-grid">
+          <label>
+            Identifiant
+            <input
+              type="number"
+              min="1"
+              required
+              [value]="formPokemon().id"
+              [disabled]="!!editingPokemon()"
+              (input)="updateFormField('id', $event)"
+            >
+          </label>
+          <label>
+            Nom
+            <input
+              type="text"
+              required
+              [value]="formPokemon().name"
+              (input)="updateFormField('name', $event)"
+            >
+          </label>
+          @for (stat of formStats; track stat.key) {
+            <label>
+              {{ stat.label }}
+              <input
+                type="number"
+                min="0"
+                max="255"
+                required
+                [value]="formPokemon()[stat.key]"
+                (input)="updateFormField(stat.key, $event)"
+              >
+            </label>
+          }
+        </div>
+        <fieldset>
+          <legend>Types (1 ou 2)</legend>
+          <div class="type-options">
+            @for (type of pokemonTypes; track type) {
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="formPokemon().type.includes(type)"
+                  [disabled]="!formPokemon().type.includes(type) && formPokemon().type.length >= 2"
+                  (change)="toggleFormType(type, $event)"
+                >
+                {{ type }}
+              </label>
+            }
+          </div>
+        </fieldset>
+        @if (formError()) {
+          <p class="form-error" role="alert">{{ formError() }}</p>
+        }
+        <div class="form-actions">
+          <button matButton="outlined" type="button" (click)="closeForm()">Annuler</button>
+          <button matButton="filled" type="submit">Enregistrer</button>
+        </div>
+      </form>
+    </section>
+  }
 
   <button
     class="team-tab"
@@ -25,7 +114,7 @@
         <div class="team-list">
           @for (pokemon of team; track pokemon.id) {
             <div class="team-pokemon">
-              <img [src]="pokemon.image" [alt]="pokemon.name">
+              <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' + pokemon.id + '.gif'" [alt]="pokemon.name">
               <span>{{ pokemon.name }}</span>
             </div>
           }
@@ -40,6 +129,7 @@
         [pokemon]="pokemon"
         [displayMode]="displayMode"
         (teamSelectionChange)="updateTeam($event)"
+        (editPokemon)="openEditForm($event)"
       />
     }
   </section>

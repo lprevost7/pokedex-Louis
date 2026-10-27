@@ -3,8 +3,7 @@ import { pokemonType } from "../enum/pokemon-type";
 export interface IPokemon {
   id: number;
   name: string;
-  type: pokemonType;
-  image: string;
+  type: pokemonType[];
   hp: number;
   sp: number;
   atq: number;

@@ -7,6 +7,7 @@ import { IPokemon } from '../../shared/interface/pokemon';
 import { CaptureRatePipe } from '../../shared/pipe/capture-rate.pipe';
 import { PokemonNamePipe } from '../../shared/pipe/pokemon-name.pipe';
 import { PokemonDisplayMode } from '../../shared/enum/card-display';
+import { pokemonType } from '../../shared/enum/pokemon-type';
 
 @Component({
   imports: [
@@ -27,18 +28,24 @@ export class PokemonCoponent {
     pokemon: IPokemon;
     selected: boolean;
   }>();
+  @Output() editPokemon = new EventEmitter<IPokemon>();
   public isPartOfTeam = false;
   public DisplayMode = PokemonDisplayMode;
 
-  get typeImage(): string {
-    return `https://raw.githubusercontent.com/partywhale/pokemon-type-icons/main/icons/${this.pokemon.type.toLowerCase()}.svg`;
-  }
-  get profileImage(): string {
-    return `https://img.pokemondb.net/sprites/black-white/anim/normal/${this.pokemon.name.toLowerCase()}.gif`;
+  public getTypeImage(type: pokemonType): string {
+    return `https://raw.githubusercontent.com/partywhale/pokemon-type-icons/main/icons/${type.toLowerCase()}.svg`;
   }
 
-  public updatePokemon(): number {
-    return 0
+  get profileImage(): string {
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${this.pokemon.id}.gif`;
+  }
+
+  public get primaryType(): pokemonType {
+    return this.pokemon.type[0];
+  }
+
+  public updatePokemon(): void {
+    this.editPokemon.emit(this.pokemon);
   }
 
   public toggleTeamSelection(): void {

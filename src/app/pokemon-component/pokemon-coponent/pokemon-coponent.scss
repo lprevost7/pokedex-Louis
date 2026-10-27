@@ -1,22 +1,204 @@
 :host {
   display: block;
-}
-
-.pokemon-card {
   height: 100%;
 }
 
-img {
-  object-fit: contain;
+.pokemon-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid #263d49;
+  border-radius: 1rem;
+  background: #f8fbf2;
+  box-shadow: inset 0 0 0 4px #dce7dc, 0 0.6rem 1rem rgba(38, 58, 67, 0.16);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
-.pokemon-card > img {
-  height: 64px;
+.pokemon-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.35rem;
+  background: #d72f3f;
+  content: '';
+}
+
+.pokemon-card:hover {
+  border-color: #d72f3f;
+  box-shadow: inset 0 0 0 4px #f4d5d8, 0 0.9rem 1.3rem rgba(38, 58, 67, 0.22);
+  transform: translateY(-4px);
+}
+
+.pokemon-card.selected {
+  border-color: #e39b2f;
+  box-shadow: inset 0 0 0 4px #f8e6bb, 0 0 0 3px rgba(227, 155, 47, 0.2), 0 0.8rem 1.2rem rgba(38, 58, 67, 0.2);
+}
+
+.pokemon-card:focus-visible {
+  outline: 3px solid #2878a8;
+  outline-offset: 3px;
+}
+
+.pokemon-card mat-card-header {
+  padding: 1.25rem 1rem 0.5rem;
+}
+
+.pokemon-card mat-card-title {
+  color: #263d49;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.pokemon-card mat-card-subtitle {
+  color: #65777e;
+  font-weight: 700;
+}
+
+.pokemon-card > img:not(.team-icon) {
+  width: 100%;
+  height: 75px;
+  object-fit: contain;
+  padding: 0.5rem 1rem;
+  filter: drop-shadow(0 0.4rem 0.25rem rgba(38, 58, 67, 0.2));
 }
 
 .type-icon {
   width: 40px;
   height: 40px;
+}
+
+.pokemon-card mat-card-content {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-top: 2px dashed #b6c8c0;
+  color: #344c54;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pokemon-card mat-card-content p {
+  margin: 0.35rem 0;
+}
+
+.stats {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 4.5rem 2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.stat-name {
+  color: #52666d;
+  font-weight: 800;
+}
+
+.stat-value {
+  color: #263d49;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.stat-track {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce7dc;
+  box-shadow: inset 0 1px 2px rgba(38, 61, 73, 0.2);
+}
+
+.stat-fill {
+  display: block;
+  height: 100%;
+  min-width: 0.2rem;
+  border-radius: inherit;
+  background: #8a9ba3;
+  transition: width 300ms ease;
+}
+
+.stats[data-type='Normal'] .stat-fill {
+  background: #a8a878;
+}
+
+.stats[data-type='Fire'] .stat-fill {
+  background: #f08030;
+}
+
+.stats[data-type='Water'] .stat-fill {
+  background: #6890f0;
+}
+
+.stats[data-type='Grass'] .stat-fill {
+  background: #78c850;
+}
+
+.stats[data-type='Electric'] .stat-fill {
+  background: #f8d030;
+}
+
+.stats[data-type='Ice'] .stat-fill {
+  background: #98d8d8;
+}
+
+.stats[data-type='Fighting'] .stat-fill {
+  background: #c03028;
+}
+
+.stats[data-type='Poison'] .stat-fill {
+  background: #a040a0;
+}
+
+.stats[data-type='Ground'] .stat-fill {
+  background: #e0c068;
+}
+
+.stats[data-type='Flying'] .stat-fill {
+  background: #a890f0;
+}
+
+.stats[data-type='Psychic'] .stat-fill {
+  background: #f85888;
+}
+
+.stats[data-type='Bug'] .stat-fill {
+  background: #a8b820;
+}
+
+.stats[data-type='Rock'] .stat-fill {
+  background: #b8a038;
+}
+
+.stats[data-type='Ghost'] .stat-fill {
+  background: #705898;
+}
+
+.stats[data-type='Dragon'] .stat-fill {
+  background: #7038f8;
+}
+
+.stats[data-type='Steel'] .stat-fill {
+  background: #b8b8d0;
+}
+
+.stats[data-type='Dark'] .stat-fill {
+  background: #705848;
+}
+
+.stats[data-type='Fairy'] .stat-fill {
+  background: #ee99ac;
+}
+
+.capture-rate {
+  margin-top: 0.9rem !important;
 }
 
 .team-icon {
@@ -25,21 +207,11 @@ img {
   object-fit: contain;
 }
 
-.pokemon-card {
-  cursor: pointer;
-  border: 3px solid transparent;
-  transition: border-color 0.2s ease;
+.pokemon-card mat-card-actions {
+  justify-content: flex-end;
+  padding: 0 1rem 1rem;
+}
 
-  &:hover {
-    border-color: lightblue;
-  }
-
-  &.selected {
-    border-color: green;
-  }
-
-  &:focus-visible {
-    outline: 2px solid blue;
-    outline-offset: 2px;
-  }
+.pokemon-card mat-card-actions button {
+  color: #263d49;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { IPokemon } from '../interface/pokemon';
 import { pokemonType } from '../enum/pokemon-type';
 
@@ -7,46 +7,27 @@ import { pokemonType } from '../enum/pokemon-type';
 })
 export class PokemonService {
 
-  private readonly pokemons: IPokemon[] = [
-
-    // ========================
-    // BULBASAUR AND EVOLUTIONS
-    // ========================
+  public readonly pokemons = signal<IPokemon[]>([
 
     {
       id: 1,
       name: 'Bulbasaur',
-      type: pokemonType.Grass,
-      image: 'https://img.pokemondb.net/sprites/black-white/anim/normal/bulbasaur.gif',
+      type: [pokemonType.Grass],
       hp: 45,
       cr: 45,
-      sp: 0,
+      sp: 45,
       atq: 49,
       spe_atq: 65,
       def: 49,
       spe_def: 65
     },
     {
-      id: 2,
-      name: 'Ivysaur',
-      type: pokemonType.Grass,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png',
-      hp: 60,
-      cr: 45,
-      sp: 0,
-      atq: 62,
-      spe_atq: 80,
-      def: 63,
-      spe_def: 80
-    },
-    {
       id: 3,
       name: 'Venusaur',
-      type: pokemonType.Grass,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png',
+      type: [pokemonType.Grass, pokemonType.Poison],
       hp: 80,
       cr: 45,
-      sp: 0,
+      sp: 80,
       atq: 82,
       spe_atq: 100,
       def: 83,
@@ -60,37 +41,23 @@ export class PokemonService {
     {
       id: 4,
       name: 'Charmander',
-      type: pokemonType.Fire,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
+      type: [pokemonType.Fire],
       hp: 39,
       cr: 45,
-      sp: 0,
+      sp: 65,
       atq: 52,
       spe_atq: 60,
       def: 43,
       spe_def: 50
     },
-    {
-      id: 5,
-      name: 'Charmeleon',
-      type: pokemonType.Fire,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png',
-      hp: 58,
-      cr: 45,
-      sp: 0,
-      atq: 64,
-      spe_atq: 80,
-      def: 58,
-      spe_def: 65
-    },
+
     {
       id: 6,
       name: 'Charizard',
-      type: pokemonType.Fire,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png',
+      type: [pokemonType.Fire, pokemonType.Flying],
       hp: 78,
       cr: 45,
-      sp: 0,
+      sp: 100,
       atq: 84,
       spe_atq: 109,
       def: 78,
@@ -104,52 +71,33 @@ export class PokemonService {
     {
       id: 7,
       name: 'Squirtle',
-      type: pokemonType.Water,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
+      type: [pokemonType.Water],
       hp: 44,
       cr: 45,
-      sp: 0,
+      sp: 43,
       atq: 48,
       spe_atq: 50,
       def: 65,
       spe_def: 64
     },
-    {
-      id: 8,
-      name: 'Wartortle',
-      type: pokemonType.Water,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png',
-      hp: 59,
-      cr: 45,
-      sp: 0,
-      atq: 63,
-      spe_atq: 65,
-      def: 80,
-      spe_def: 80
-    },
+
     {
       id: 9,
       name: 'Blastoise',
-      type: pokemonType.Water,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png',
+      type: [pokemonType.Water],
       hp: 79,
       cr: 45,
-      sp: 0,
+      sp: 78,
       atq: 83,
       spe_atq: 85,
       def: 100,
       spe_def: 105
     },
 
-    // ========================
-    // PIKACHU
-    // ========================
-
     {
       id: 25,
       name: 'Pikachu',
-      type: pokemonType.Electric,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
+      type: [pokemonType.Electric],
       hp: 35,
       cr: 190,
       sp: 0,
@@ -159,15 +107,10 @@ export class PokemonService {
       spe_def: 50
     },
 
-    // ========================
-    // MEWTWO
-    // ========================
-
     {
       id: 150,
       name: 'Mewtwo',
-      type: pokemonType.Psychic,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png',
+      type: [pokemonType.Psychic],
       hp: 106,
       cr: 3,
       sp: 0,
@@ -177,15 +120,10 @@ export class PokemonService {
       spe_def: 90
     },
 
-    // ========================
-    // MEW
-    // ========================
-
     {
       id: 151,
       name: 'Mew',
-      type: pokemonType.Psychic,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png',
+      type: [pokemonType.Psychic],
       hp: 100,
       cr: 45,
       sp: 0,
@@ -193,15 +131,132 @@ export class PokemonService {
       spe_atq: 100,
       def: 100,
       spe_def: 100
+    },
+
+    {
+      id: 350,
+      name: 'Milotic',
+      type: [pokemonType.Water],
+      hp: 95,
+      cr: 60,
+      sp: 81,
+      atq: 60,
+      spe_atq: 100,
+      def: 79,
+      spe_def: 125
+    },
+    {
+      id: 407,
+      name: 'Roserade',
+      type: [pokemonType.Grass, pokemonType.Poison],
+      hp: 60,
+      cr: 75,
+      sp: 90,
+      atq: 70,
+      spe_atq: 125,
+      def: 65,
+      spe_def: 105
+    },
+    {
+      id: 423,
+      name: 'Gastrodon',
+      type: [pokemonType.Water, pokemonType.Ground],
+      hp: 111,
+      cr: 75,
+      sp: 39,
+      atq: 83,
+      spe_atq: 92,
+      def: 68,
+      spe_def: 82
+    },
+    {
+      id: 442,
+      name: 'Spiritomb',
+      type: [pokemonType.Ghost],
+      hp: 50,
+      cr: 100,
+      sp: 35,
+      atq: 92,
+      spe_atq: 92,
+      def: 108,
+      spe_def: 108
+    },
+    {
+      id: 445,
+      name: 'Garchomp',
+      type: [pokemonType.Dragon, pokemonType.Ground],
+      hp: 108,
+      cr: 45,
+      sp: 102,
+      atq: 130,
+      spe_atq: 80,
+      def: 95,
+      spe_def: 85
+    },
+    {
+      id: 448,
+      name: 'Lucario',
+      type: [pokemonType.Fighting, pokemonType.Steel],
+      hp: 70,
+      cr: 45,
+      sp: 90,
+      atq: 110,
+      spe_atq: 115,
+      def: 70,
+      spe_def: 70
+    },
+    {
+      id: 483,
+      name: 'Dialga',
+      type: [pokemonType.Dragon, pokemonType.Steel],
+      hp: 100,
+      cr: 30,
+      sp: 90,
+      atq: 120,
+      spe_atq: 150,
+      def: 120,
+      spe_def: 100
+    },
+    {
+      id: 484,
+      name: 'Palkia',
+      type: [pokemonType.Dragon, pokemonType.Water],
+      hp: 90,
+      cr: 30,
+      sp: 100,
+      atq: 120,
+      spe_atq: 150,
+      def: 100,
+      spe_def: 120
     }
 
-  ];
+  ]);
 
   public getPokemons(): IPokemon[] {
-    return this.pokemons;
+    return this.pokemons();
   }
 
   public getPokemonById(id: number): IPokemon | undefined {
-    return this.pokemons.find(pokemon => pokemon.id === id);
+    return this.pokemons().find(pokemon => pokemon.id === id);
+  }
+
+  public addPokemon(pokemon: IPokemon): void {
+    if (this.getPokemonById(pokemon.id)) {
+      throw new Error(`Le Pokémon avec l'identifiant ${pokemon.id} existe déjà.`);
+    }
+
+    this.pokemons.update(pokemons => [...pokemons, pokemon]);
+  }
+
+  public updatePokemon(pokemon: IPokemon): void {
+    if (!this.getPokemonById(pokemon.id)) {
+      throw new Error(`Le Pokémon avec l'identifiant ${pokemon.id} n'existe pas.`);
+    }
+
+    this.pokemons.update(pokemons =>
+      pokemons.map(currentPokemon =>
+        currentPokemon.id === pokemon.id ? pokemon : currentPokemon
+      )
+    );
   }
 }
