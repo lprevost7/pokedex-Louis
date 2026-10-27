@@ -11,4 +11,6 @@ export interface IPokemon {
   def: number;
   spe_def: number;
   cr: number;
+  attacks?: { id: number; name: string; points: number }[];
+  imageURL?: string;
 }

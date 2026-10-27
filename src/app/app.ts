@@ -88,18 +88,20 @@ export class App implements OnDestroy {
     });
   }
 
-  savePokemon(): void {
+  async savePokemon(): Promise<void> {
     const pokemon = this.formPokemon();
-    if (pokemon.id < 1 || !pokemon.name.trim() || pokemon.type.length === 0) {
-      this.formError.set('L’identifiant, le nom et au moins un type sont obligatoires.');
+    if ((this.editingPokemon() && pokemon.id < 1) ||
+      !pokemon.name.trim() ||
+      pokemon.type.length === 0) {
+      this.formError.set('Le nom et au moins un type sont obligatoires.');
       return;
     }
 
     try {
       if (this.editingPokemon()) {
-        this.pokemonService.updatePokemon(pokemon);
+        await this.pokemonService.updatePokemon(pokemon);
       } else {
-        this.pokemonService.addPokemon(pokemon);
+        await this.pokemonService.addPokemon(pokemon);
       }
       this.closeForm();
     } catch (error) {

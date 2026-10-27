@@ -35,17 +35,16 @@
       <h2>{{ editingPokemon() ? 'Modifier le Pokémon' : 'Ajouter un Pokémon' }}</h2>
       <form (ngSubmit)="savePokemon()">
         <div class="form-grid">
-          <label>
-            Identifiant
-            <input
-              type="number"
-              min="1"
-              required
-              [value]="formPokemon().id"
-              [disabled]="!!editingPokemon()"
-              (input)="updateFormField('id', $event)"
-            >
-          </label>
+          @if (editingPokemon()) {
+            <label>
+              Identifiant
+              <input
+                type="number"
+                [value]="formPokemon().id"
+                disabled
+              >
+            </label>
+          }
           <label>
             Nom
             <input

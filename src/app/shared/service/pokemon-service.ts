@@ -1,262 +1,142 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { IPokemon } from '../interface/pokemon';
+import { firstValueFrom } from 'rxjs';
 import { pokemonType } from '../enum/pokemon-type';
+import { IPokemon } from '../interface/pokemon';
 
-@Injectable({
-  providedIn: 'root',
-})
+interface ApiAttack {
+  id: number;
+  name: string;
+  points: number;
+}
+
+interface ApiPokemon {
+  id: number;
+  name: string;
+  type: string | string[];
+  attacks: ApiAttack[];
+  defensePoints: number;
+  healthPoints: number;
+  specialAttack: number;
+  specialDefense: number;
+  speed: number;
+  captureRate: number;
+  imageURL: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class PokemonService {
+  private readonly apiUrl = 'http://localhost:7000/api/pokemons';
+  private readonly loadingPromise: Promise<void>;
+  public readonly pokemons = signal<IPokemon[]>([]);
 
-  public readonly pokemons = signal<IPokemon[]>([
-
-    {
-      id: 1,
-      name: 'Bulbasaur',
-      type: [pokemonType.Grass],
-      hp: 45,
-      cr: 45,
-      sp: 45,
-      atq: 49,
-      spe_atq: 65,
-      def: 49,
-      spe_def: 65
-    },
-    {
-      id: 3,
-      name: 'Venusaur',
-      type: [pokemonType.Grass, pokemonType.Poison],
-      hp: 80,
-      cr: 45,
-      sp: 80,
-      atq: 82,
-      spe_atq: 100,
-      def: 83,
-      spe_def: 100
-    },
-
-    // ========================
-    // CHARMANDER AND EVOLUTIONS
-    // ========================
-
-    {
-      id: 4,
-      name: 'Charmander',
-      type: [pokemonType.Fire],
-      hp: 39,
-      cr: 45,
-      sp: 65,
-      atq: 52,
-      spe_atq: 60,
-      def: 43,
-      spe_def: 50
-    },
-
-    {
-      id: 6,
-      name: 'Charizard',
-      type: [pokemonType.Fire, pokemonType.Flying],
-      hp: 78,
-      cr: 45,
-      sp: 100,
-      atq: 84,
-      spe_atq: 109,
-      def: 78,
-      spe_def: 85
-    },
-
-    // ========================
-    // SQUIRTLE AND EVOLUTIONS
-    // ========================
-
-    {
-      id: 7,
-      name: 'Squirtle',
-      type: [pokemonType.Water],
-      hp: 44,
-      cr: 45,
-      sp: 43,
-      atq: 48,
-      spe_atq: 50,
-      def: 65,
-      spe_def: 64
-    },
-
-    {
-      id: 9,
-      name: 'Blastoise',
-      type: [pokemonType.Water],
-      hp: 79,
-      cr: 45,
-      sp: 78,
-      atq: 83,
-      spe_atq: 85,
-      def: 100,
-      spe_def: 105
-    },
-
-    {
-      id: 25,
-      name: 'Pikachu',
-      type: [pokemonType.Electric],
-      hp: 35,
-      cr: 190,
-      sp: 0,
-      atq: 55,
-      spe_atq: 50,
-      def: 40,
-      spe_def: 50
-    },
-
-    {
-      id: 150,
-      name: 'Mewtwo',
-      type: [pokemonType.Psychic],
-      hp: 106,
-      cr: 3,
-      sp: 0,
-      atq: 110,
-      spe_atq: 154,
-      def: 90,
-      spe_def: 90
-    },
-
-    {
-      id: 151,
-      name: 'Mew',
-      type: [pokemonType.Psychic],
-      hp: 100,
-      cr: 45,
-      sp: 0,
-      atq: 100,
-      spe_atq: 100,
-      def: 100,
-      spe_def: 100
-    },
-
-    {
-      id: 350,
-      name: 'Milotic',
-      type: [pokemonType.Water],
-      hp: 95,
-      cr: 60,
-      sp: 81,
-      atq: 60,
-      spe_atq: 100,
-      def: 79,
-      spe_def: 125
-    },
-    {
-      id: 407,
-      name: 'Roserade',
-      type: [pokemonType.Grass, pokemonType.Poison],
-      hp: 60,
-      cr: 75,
-      sp: 90,
-      atq: 70,
-      spe_atq: 125,
-      def: 65,
-      spe_def: 105
-    },
-    {
-      id: 423,
-      name: 'Gastrodon',
-      type: [pokemonType.Water, pokemonType.Ground],
-      hp: 111,
-      cr: 75,
-      sp: 39,
-      atq: 83,
-      spe_atq: 92,
-      def: 68,
-      spe_def: 82
-    },
-    {
-      id: 442,
-      name: 'Spiritomb',
-      type: [pokemonType.Ghost],
-      hp: 50,
-      cr: 100,
-      sp: 35,
-      atq: 92,
-      spe_atq: 92,
-      def: 108,
-      spe_def: 108
-    },
-    {
-      id: 445,
-      name: 'Garchomp',
-      type: [pokemonType.Dragon, pokemonType.Ground],
-      hp: 108,
-      cr: 45,
-      sp: 102,
-      atq: 130,
-      spe_atq: 80,
-      def: 95,
-      spe_def: 85
-    },
-    {
-      id: 448,
-      name: 'Lucario',
-      type: [pokemonType.Fighting, pokemonType.Steel],
-      hp: 70,
-      cr: 45,
-      sp: 90,
-      atq: 110,
-      spe_atq: 115,
-      def: 70,
-      spe_def: 70
-    },
-    {
-      id: 483,
-      name: 'Dialga',
-      type: [pokemonType.Dragon, pokemonType.Steel],
-      hp: 100,
-      cr: 30,
-      sp: 90,
-      atq: 120,
-      spe_atq: 150,
-      def: 120,
-      spe_def: 100
-    },
-    {
-      id: 484,
-      name: 'Palkia',
-      type: [pokemonType.Dragon, pokemonType.Water],
-      hp: 90,
-      cr: 30,
-      sp: 100,
-      atq: 120,
-      spe_atq: 150,
-      def: 100,
-      spe_def: 120
-    }
-
-  ]);
-
-  public getPokemons(): IPokemon[] {
-    return this.pokemons();
+  constructor(private readonly http: HttpClient) {
+    this.loadingPromise = this.loadPokemons().catch(error => {
+      console.error('Impossible de charger les Pokémon depuis l’API.', error);
+      throw error;
+    });
   }
 
   public getPokemonById(id: number): IPokemon | undefined {
     return this.pokemons().find(pokemon => pokemon.id === id);
   }
 
-  public addPokemon(pokemon: IPokemon): void {
-    if (this.getPokemonById(pokemon.id)) {
-      throw new Error(`Le Pokémon avec l'identifiant ${pokemon.id} existe déjà.`);
-    }
-
-    this.pokemons.update(pokemons => [...pokemons, pokemon]);
+  public getPokemons(): IPokemon[] {
+    return this.pokemons();
   }
 
-  public updatePokemon(pokemon: IPokemon): void {
-    if (!this.getPokemonById(pokemon.id)) {
-      throw new Error(`Le Pokémon avec l'identifiant ${pokemon.id} n'existe pas.`);
+  public async addPokemon(pokemon: IPokemon): Promise<void> {
+    try {
+      await this.loadingPromise;
+      const created = await firstValueFrom(this.http.post<ApiPokemon>(
+        this.apiUrl,
+        this.toApiPokemon(pokemon)
+      ));
+      this.pokemons.update(pokemons => [...pokemons, this.fromApiPokemon(created)]);
+    } catch (error) {
+      throw new Error(this.getApiErrorMessage(error, 'Impossible de créer le Pokémon.'));
+    }
+  }
+
+  public async updatePokemon(pokemon: IPokemon): Promise<void> {
+    try {
+      await this.loadingPromise;
+      const updated = await firstValueFrom(
+        this.http.put<ApiPokemon>(`${this.apiUrl}/${pokemon.id}`, this.toApiPokemon(pokemon))
+      );
+      this.pokemons.update(pokemons =>
+        pokemons.map(current => current.id === pokemon.id ? this.fromApiPokemon(updated) : current)
+      );
+    } catch (error) {
+      throw new Error(this.getApiErrorMessage(error, 'Impossible de modifier le Pokémon.'));
+    }
+  }
+
+  private async loadPokemons(): Promise<void> {
+    const apiPokemons = await firstValueFrom(this.http.get<ApiPokemon[]>(this.apiUrl));
+    this.pokemons.set(apiPokemons.map(pokemon => this.fromApiPokemon(pokemon)));
+  }
+
+  private fromApiPokemon(pokemon: ApiPokemon): IPokemon {
+    const types = (Array.isArray(pokemon.type) ? pokemon.type : [pokemon.type])
+      .map(type => this.toPokemonType(type))
+      .filter((type): type is pokemonType => type !== undefined);
+    return {
+      id: pokemon.id,
+      name: pokemon.name,
+      type: types,
+      hp: pokemon.healthPoints,
+      sp: pokemon.speed,
+      atq: pokemon.attacks[0]?.points ?? 0,
+      spe_atq: pokemon.specialAttack,
+      def: pokemon.defensePoints,
+      spe_def: pokemon.specialDefense,
+      cr: pokemon.captureRate,
+      attacks: pokemon.attacks,
+      imageURL: pokemon.imageURL,
+    };
+  }
+
+  private toApiPokemon(pokemon: IPokemon): Omit<ApiPokemon, 'id'> {
+    const attacks = pokemon.attacks?.length
+      ? pokemon.attacks.map((attack, index) => ({
+        ...attack,
+        points: index === 0 ? pokemon.atq : index === 1 ? pokemon.spe_atq : attack.points,
+      }))
+      : [
+        { id: 0, name: 'Attaque', points: pokemon.atq },
+        { id: 0, name: 'Attaque spéciale', points: pokemon.spe_atq },
+      ];
+
+    return {
+      name: pokemon.name,
+      type: pokemon.type.map(type => type.toUpperCase()),
+      attacks,
+      defensePoints: pokemon.def,
+      healthPoints: pokemon.hp,
+      specialAttack: pokemon.spe_atq,
+      specialDefense: pokemon.spe_def,
+      speed: pokemon.sp,
+      captureRate: pokemon.cr,
+      imageURL: pokemon.imageURL ?? '',
+    };
+  }
+
+  private toPokemonType(type: string): pokemonType | undefined {
+    return Object.values(pokemonType).find(value => value.toUpperCase() === type.toUpperCase());
+  }
+
+  private getApiErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) return fallback;
+
+    const apiMessage = error.error?.message;
+    if (typeof apiMessage === 'string') return apiMessage;
+
+    const validationErrors = error.error?.errors;
+    if (validationErrors && typeof validationErrors === 'object') {
+      return Object.values(validationErrors).flat().join(' ');
     }
 
-    this.pokemons.update(pokemons =>
-      pokemons.map(currentPokemon =>
-        currentPokemon.id === pokemon.id ? pokemon : currentPokemon
-      )
-    );
+    return error.message || fallback;
   }
 }
